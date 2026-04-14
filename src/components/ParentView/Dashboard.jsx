@@ -46,7 +46,7 @@ export default function ParentView() {
             </div>
           </div>
           <button onClick={handleLogout} className="flex items-center gap-1 text-blue-200 hover:text-white text-sm">
-            <LogOut className="w-4 h-4" /> Salir
+            <LogOut className="w-4 h-4" /> Sign Out
           </button>
         </div>
       </header>
@@ -58,13 +58,13 @@ export default function ParentView() {
             onClick={() => setTab('photos')}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition ${tab === 'photos' ? 'bg-blue-700 text-white' : 'bg-white text-blue-700 border border-blue-200 hover:bg-blue-50'}`}
           >
-            <Image className="w-4 h-4" /> Fotos
+            <Image className="w-4 h-4" /> Photos
           </button>
           <button
             onClick={() => setTab('events')}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition ${tab === 'events' ? 'bg-blue-700 text-white' : 'bg-white text-blue-700 border border-blue-200 hover:bg-blue-50'}`}
           >
-            <Calendar className="w-4 h-4" /> Eventos
+            <Calendar className="w-4 h-4" /> Events
           </button>
         </div>
 
@@ -74,7 +74,7 @@ export default function ParentView() {
             {photos.length === 0 ? (
               <div className="text-center py-16">
                 <Flower2 className="w-16 h-16 text-blue-200 mx-auto mb-4" fill="currentColor" />
-                <p className="text-gray-400">Aún no hay fotos. ¡Vuelve pronto!</p>
+                <p className="text-gray-400">No photos yet. Check back soon!</p>
               </div>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
@@ -101,14 +101,14 @@ export default function ParentView() {
             {events.length === 0 ? (
               <div className="text-center py-16">
                 <Calendar className="w-16 h-16 text-blue-200 mx-auto mb-4" />
-                <p className="text-gray-400">No hay eventos programados aún.</p>
+                <p className="text-gray-400">No events scheduled yet.</p>
               </div>
             ) : (
               <div className="space-y-3">
                 {events.map(event => (
                   <div key={event.id} className="bg-white rounded-xl shadow p-4">
                     <span className="bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-1 rounded">
-                      {new Date(event.date + 'T00:00:00').toLocaleDateString('es-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
+                      {new Date(event.date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
                     </span>
                     <h3 className="font-semibold text-blue-900 mt-2">{event.title}</h3>
                     {event.description && <p className="text-gray-500 text-sm mt-1">{event.description}</p>}
@@ -130,7 +130,7 @@ export default function ParentView() {
             <img src={selected.url} alt={selected.caption} className="w-full rounded-xl shadow-2xl" />
             <p className="text-white text-center mt-3 text-sm">{selected.caption}</p>
             <button onClick={() => setSelected(null)} className="block mx-auto mt-4 text-gray-300 hover:text-white text-sm">
-              Cerrar
+              Close
             </button>
           </div>
         </div>

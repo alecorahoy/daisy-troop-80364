@@ -50,22 +50,22 @@ export default function LeaderDashboard() {
         createdAt: serverTimestamp(),
       });
       setCaption('');
-      setMessage('Foto subida con éxito.');
+      setMessage('Photo uploaded successfully.');
       loadPhotos();
     } catch (err) {
-      setMessage('Error al subir foto: ' + err.message);
+      setMessage('Error uploading photo: ' + err.message);
     }
     setUploading(false);
   }
 
   async function deletePhoto(photo) {
-    if (!confirm('¿Eliminar esta foto?')) return;
+    if (!confirm('Delete this photo?')) return;
     try {
       if (photo.storagePath) await deleteObject(ref(storage, photo.storagePath));
       await deleteDoc(doc(db, 'photos', photo.id));
       setPhotos(p => p.filter(x => x.id !== photo.id));
     } catch (err) {
-      setMessage('Error al eliminar: ' + err.message);
+      setMessage('Error deleting photo: ' + err.message);
     }
   }
 
@@ -77,12 +77,12 @@ export default function LeaderDashboard() {
       setShowEventForm(false);
       loadEvents();
     } catch (err) {
-      setMessage('Error al crear evento: ' + err.message);
+      setMessage('Error creating event: ' + err.message);
     }
   }
 
   async function deleteEvent(id) {
-    if (!confirm('¿Eliminar este evento?')) return;
+    if (!confirm('Delete this event?')) return;
     await deleteDoc(doc(db, 'events', id));
     setEvents(e => e.filter(x => x.id !== id));
   }
@@ -101,11 +101,11 @@ export default function LeaderDashboard() {
             <Flower2 className="w-8 h-8 text-yellow-400" fill="currentColor" />
             <div>
               <h1 className="font-bold text-lg leading-tight">Troop 80364</h1>
-              <p className="text-blue-200 text-xs">Panel de Líder</p>
+              <p className="text-blue-200 text-xs">Leader Dashboard</p>
             </div>
           </div>
           <button onClick={handleLogout} className="flex items-center gap-1 text-blue-200 hover:text-white text-sm">
-            <LogOut className="w-4 h-4" /> Salir
+            <LogOut className="w-4 h-4" /> Sign Out
           </button>
         </div>
       </header>
@@ -124,13 +124,13 @@ export default function LeaderDashboard() {
             onClick={() => setTab('photos')}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition ${tab === 'photos' ? 'bg-blue-700 text-white' : 'bg-white text-blue-700 border border-blue-200 hover:bg-blue-50'}`}
           >
-            <Image className="w-4 h-4" /> Fotos
+            <Image className="w-4 h-4" /> Photos
           </button>
           <button
             onClick={() => setTab('events')}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition ${tab === 'events' ? 'bg-blue-700 text-white' : 'bg-white text-blue-700 border border-blue-200 hover:bg-blue-50'}`}
           >
-            <Calendar className="w-4 h-4" /> Eventos
+            <Calendar className="w-4 h-4" /> Events
           </button>
         </div>
 
@@ -139,10 +139,10 @@ export default function LeaderDashboard() {
           <div>
             {/* Upload */}
             <div className="bg-white rounded-xl shadow p-5 mb-6">
-              <h2 className="font-bold text-blue-900 mb-3 text-lg">Subir Foto</h2>
+              <h2 className="font-bold text-blue-900 mb-3 text-lg">Upload Photo</h2>
               <input
                 type="text"
-                placeholder="Descripción (opcional)"
+                placeholder="Caption (optional)"
                 value={caption}
                 onChange={e => setCaption(e.target.value)}
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3 focus:ring-2 focus:ring-blue-400"
@@ -154,13 +154,13 @@ export default function LeaderDashboard() {
                 className="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-blue-900 font-bold px-5 py-2 rounded-lg transition disabled:opacity-50"
               >
                 <Upload className="w-4 h-4" />
-                {uploading ? 'Subiendo...' : 'Seleccionar Foto'}
+                {uploading ? 'Uploading...' : 'Select Photo'}
               </button>
             </div>
 
             {/* Gallery */}
             {photos.length === 0 ? (
-              <p className="text-center text-gray-400 py-12">No hay fotos aún. ¡Sube la primera!</p>
+              <p className="text-center text-gray-400 py-12">No photos yet. Upload the first one!</p>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {photos.map(photo => (
@@ -186,21 +186,21 @@ export default function LeaderDashboard() {
         {tab === 'events' && (
           <div>
             <div className="flex justify-between items-center mb-4">
-              <h2 className="font-bold text-blue-900 text-lg">Próximos Eventos</h2>
+              <h2 className="font-bold text-blue-900 text-lg">Upcoming Events</h2>
               <button
                 onClick={() => setShowEventForm(!showEventForm)}
                 className="flex items-center gap-1 bg-yellow-400 hover:bg-yellow-500 text-blue-900 font-bold px-4 py-2 rounded-lg transition text-sm"
               >
-                <Plus className="w-4 h-4" /> Nuevo Evento
+                <Plus className="w-4 h-4" /> New Event
               </button>
             </div>
 
             {showEventForm && (
               <div className="bg-white rounded-xl shadow p-5 mb-6">
-                <h3 className="font-semibold text-blue-800 mb-3">Crear Evento</h3>
+                <h3 className="font-semibold text-blue-800 mb-3">Create Event</h3>
                 <input
                   type="text"
-                  placeholder="Título del evento"
+                  placeholder="Event title"
                   value={newEvent.title}
                   onChange={e => setNewEvent({ ...newEvent, title: e.target.value })}
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3 focus:ring-2 focus:ring-blue-400"
@@ -212,24 +212,24 @@ export default function LeaderDashboard() {
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3 focus:ring-2 focus:ring-blue-400"
                 />
                 <textarea
-                  placeholder="Descripción (opcional)"
+                  placeholder="Description (optional)"
                   value={newEvent.description}
                   onChange={e => setNewEvent({ ...newEvent, description: e.target.value })}
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 mb-3 focus:ring-2 focus:ring-blue-400 h-24 resize-none"
                 />
                 <div className="flex gap-2">
                   <button onClick={addEvent} className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-5 py-2 rounded-lg transition">
-                    Guardar
+                    Save
                   </button>
                   <button onClick={() => setShowEventForm(false)} className="bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold px-5 py-2 rounded-lg transition">
-                    Cancelar
+                    Cancel
                   </button>
                 </div>
               </div>
             )}
 
             {events.length === 0 ? (
-              <p className="text-center text-gray-400 py-12">No hay eventos programados.</p>
+              <p className="text-center text-gray-400 py-12">No events scheduled yet.</p>
             ) : (
               <div className="space-y-3">
                 {events.map(event => (
@@ -237,7 +237,7 @@ export default function LeaderDashboard() {
                     <div>
                       <div className="flex items-center gap-2">
                         <span className="bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-1 rounded">
-                          {new Date(event.date + 'T00:00:00').toLocaleDateString('es-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                          {new Date(event.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                         </span>
                       </div>
                       <h3 className="font-semibold text-blue-900 mt-1">{event.title}</h3>

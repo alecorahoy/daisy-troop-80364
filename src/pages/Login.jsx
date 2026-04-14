@@ -21,7 +21,7 @@ export default function Login() {
       const role = token.claims.role || 'parent';
       navigate(role === 'leader' ? '/leader' : '/parent');
     } catch (err) {
-      setError('Email o contraseña incorrectos.');
+      setError('Incorrect email or password.');
     }
     setLoading(false);
   };
@@ -35,7 +35,7 @@ export default function Login() {
 
         <h1 className="text-3xl font-bold text-center text-blue-900 mb-1">Girl Scout</h1>
         <h2 className="text-2xl font-bold text-center text-yellow-500 mb-1">Daisy Troop 80364</h2>
-        <p className="text-center text-gray-500 mb-8 text-sm">Comunidad de Padres · New Jersey</p>
+        <p className="text-center text-gray-500 mb-8 text-sm">Parent Community · New Jersey</p>
 
         {error && (
           <div className="bg-red-50 border border-red-300 text-red-700 px-4 py-3 rounded-lg mb-4 text-sm">
@@ -56,7 +56,7 @@ export default function Login() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
             <input
               type="password"
               value={password}
@@ -71,7 +71,7 @@ export default function Login() {
             disabled={loading}
             className="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-2.5 px-4 rounded-lg transition disabled:opacity-50"
           >
-            {loading ? 'Ingresando...' : 'Ingresar'}
+            {loading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
 
