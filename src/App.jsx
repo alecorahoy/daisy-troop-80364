@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Login from './pages/Login';
 import LeaderDashboard from './components/LeaderDashboard/Dashboard';
 import ParentView from './components/ParentView/Dashboard';
+import Demo from './pages/Demo';
 import { Flower2 } from 'lucide-react';
 import './index.css';
 
@@ -61,6 +62,7 @@ function App() {
             }
           />
           <Route path="/" element={<RootRedirect />} />
+          <Route path="/demo" element={<Demo />} />
           <Route path="*" element={<RootRedirect />} />
         </Routes>
       </Router>
