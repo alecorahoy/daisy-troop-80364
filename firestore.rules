@@ -1,25 +1,42 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /photos/{photoId} {
-      // Any signed-in user can view photos
-      allow read: if request.auth != null;
 
-      // Any signed-in user can upload a photo — must stamp their own uid
+    match /photos/{photoId} {
+      allow read: if request.auth != null;
       allow create: if request.auth != null
         && request.resource.data.uploadedBy == request.auth.uid;
-
-      // Only the original uploader OR a leader can delete a photo
       allow delete: if request.auth != null
         && (resource.data.uploadedBy == request.auth.uid
             || request.auth.token.role == 'leader');
-
-      // Only leaders can edit (e.g. change caption)
       allow update: if request.auth.token.role == 'leader';
     }
 
     match /events/{document=**} {
-      // All signed-in users can see events; only leaders manage them
+      allow read: if request.auth != null;
+      allow create, update, delete: if request.auth.token.role == 'leader';
+    }
+
+    // Announcements: leader posts, everyone reads
+    match /announcements/{document=**} {
+      allow read: if request.auth != null;
+      allow create, update, delete: if request.auth.token.role == 'leader';
+    }
+
+    // Photo reactions (hearts): any signed-in user, stored as /photos/{id}/reactions/{uid}
+    match /photos/{photoId}/reactions/{uid} {
+      allow read: if request.auth != null;
+      allow create, delete: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Troop members (girls): leader manages, everyone reads
+    match /girls/{document=**} {
+      allow read: if request.auth != null;
+      allow create, update, delete: if request.auth.token.role == 'leader';
+    }
+
+    // Troop-wide settings (e.g. cookie goal): leader manages, everyone reads
+    match /troopSettings/{document=**} {
       allow read: if request.auth != null;
       allow create, update, delete: if request.auth.token.role == 'leader';
     }

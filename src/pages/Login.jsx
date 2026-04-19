@@ -16,10 +16,8 @@ export default function Login() {
     setError('');
     setLoading(true);
     try {
-      const result = await signInWithEmailAndPassword(auth, email, password);
-      const token = await result.user.getIdTokenResult();
-      const role = token.claims.role || 'parent';
-      navigate(role === 'leader' ? '/leader' : '/parent');
+      await signInWithEmailAndPassword(auth, email, password);
+      navigate('/');
     } catch (err) {
       setError('Incorrect email or password.');
     }
