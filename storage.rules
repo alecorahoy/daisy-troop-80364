@@ -1,0 +1,14 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /photos/{allPaths=**} {
+      // Any signed-in user can view and upload photos (max 2 MB, images only)
+      allow read: if request.auth != null;
+      allow create: if request.auth != null
+        && request.resource.size < 2 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+      // Only leaders can delete from storage
+      allow delete: if request.auth.token.role == 'leader';
+    }
+  }
+}

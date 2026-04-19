@@ -6,6 +6,7 @@ import {
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { auth, db, storage } from '../../firebase/config';
+import { compressImage } from '../../utils/compressImage';
 import { Flower2, Upload, Trash2, LogOut, Calendar, Image, Plus, X } from 'lucide-react';
 
 export default function LeaderDashboard() {
@@ -40,13 +41,16 @@ export default function LeaderDashboard() {
     if (!file) return;
     setUploading(true);
     try {
-      const storageRef = ref(storage, `photos/${Date.now()}_${file.name}`);
-      await uploadBytes(storageRef, file);
+      const compressed = await compressImage(file);
+      const storageRef = ref(storage, `photos/${Date.now()}_${compressed.name}`);
+      await uploadBytes(storageRef, compressed);
       const url = await getDownloadURL(storageRef);
       await addDoc(collection(db, 'photos'), {
         url,
         caption: caption || file.name,
         storagePath: storageRef.fullPath,
+        uploadedBy: auth.currentUser.uid,
+        uploaderEmail: auth.currentUser.email,
         createdAt: serverTimestamp(),
       });
       setCaption('');
@@ -56,6 +60,7 @@ export default function LeaderDashboard() {
       setMessage('Error uploading photo: ' + err.message);
     }
     setUploading(false);
+    if (fileInputRef.current) fileInputRef.current.value = '';
   }
 
   async function deletePhoto(photo) {
